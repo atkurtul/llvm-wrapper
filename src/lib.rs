@@ -1437,6 +1437,7 @@ impl ContextRef {
     pub fn insert_basic_block_in_context(self, a0: BasicBlockRef, a1: *const i8) -> BasicBlockRef {
         BasicBlockRef(unsafe { LLVMInsertBasicBlockInContext(self.0, a0.0, a1) })
     }
+    #[link(name = "LLVM-11", kind = "dylib")]
     pub fn create_builder_in_context(self) -> BuilderRef {
         BuilderRef(unsafe { LLVMCreateBuilderInContext(self.0) })
     }
@@ -4120,6 +4121,7 @@ pub fn initialize_sparc_target() -> () {
 pub fn const_i_cmp(a0: LLVMIntPredicate, a1: ValueRef, a2: ValueRef) -> ValueRef {
     ValueRef(unsafe { LLVMConstICmp(a0, a1.0, a2.0) })
 }
+#[link(name = "LLVM-11", kind = "dylib")]
 pub fn create_builder() -> BuilderRef {
     BuilderRef(unsafe { LLVMCreateBuilder() })
 }
