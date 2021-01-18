@@ -5,6 +5,7 @@ authors = ["atil <atilkurtulmus@gmail.com>"]
 edition = "2018"
 description = "Safe llvm-sys wrapper"
 license = "MIT"
+repository = "https://github.com/atkurtul/llvm-wrapper"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
