@@ -1,5 +1,5 @@
-use std::{collections::HashMap, io::stdin};
 use std::collections::HashSet;
+use std::{collections::HashMap, io::stdin};
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct Func {
@@ -14,7 +14,6 @@ use std::fs::*;
 use std::io::*;
 
 fn main() {
-
     let name = Regex::new(r"^(\w+)").unwrap();
     let arg = Regex::new(r"\((.*?)\)").unwrap();
     let ret = Regex::new(r"\[(.*?)\]").unwrap();
@@ -30,6 +29,9 @@ fn main() {
     for src in src {
         if let Some(cap) = name.captures(&src) {
             let cap = cap.get(1).unwrap().as_str().to_owned();
+            if cap == "AddInternalizePassWithMustPreservePredicate" {
+                continue;
+            }
             let mut re = "".to_owned();
             if let Some(cap) = ret.captures(&src) {
                 re = cap.get(1).unwrap().as_str().to_owned();
@@ -41,23 +43,20 @@ fn main() {
             }
 
             if let Some(o) = args.first() {
-                if o.starts_with("LLVM") {
-                    xargs
-                        .entry(o.clone())
-                        .or_default()
-                        .push(cap.clone());
+                if o.starts_with("LLVM") && !o.ends_with("Predicate"){
+                    xargs.entry(o.clone()).or_default().push(cap.clone());
                     xsts.insert(o.trim_end().to_owned());
                 }
             }
             let re = if re.is_empty() { "()".to_owned() } else { re };
-            if let Some(other) = (funcs.insert(
+            if let Some(other) = funcs.insert(
                 cap.clone(),
                 Func {
                     name: cap.clone(),
                     re,
                     args,
                 },
-            )) {
+            ) {
                 eprintln!("Duplicate {} ", cap);
             }
         }
@@ -70,7 +69,6 @@ fn main() {
         }
     }
 
-    // out.push(format!("pub use crate::decls::*;"));
     for (k, v) in xargs.iter() {
         out.push(format!("impl {} {{", &k[4..]));
         for v in v {
@@ -164,6 +162,7 @@ fn main() {
         "error_handling",
         "execution_engine",
         "initialization",
+        "ir_reader",
         "linker",
         "object",
         "orc",

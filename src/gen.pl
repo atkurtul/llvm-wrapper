@@ -15,18 +15,19 @@ find(
 sub xform_file {
     my ($fname) = @_;
     open(fh, '<', "$fname") or  die $!;
-    # my $writeto = substr $fname, 0, -3;
     $noline = "";
     while($line = <fh>) {
-      # $line =~ s/::libc::c_char/i8/g;
-      # $line =~ s/::libc::c_uint/u32/g;
-      # $line =~ s/::libc::size_t/usize/g;
+      $line =~ s/::libc::c_char/i8/g;
+      $line =~ s/::libc::c_uint/u32/g;
+      $line =~ s/::libc::size_t/usize/g;
       $line =~ s/\/\/.*\n//g;
-      $line =~ s/\t/ /g;
+      $line =~ s/\t+/ /g;
       $line =~ s/ +/ /g;
-      $noline = "$noline$line";
+      $line =~ s/\n//g;
+      $line =~ s/^\s+//g;
+      $noline .= $line;
     }
-    while($noline =~ /pub fn LLVM(\w+)\((.*?)\)\s*(->\s*(.*?))?;\n/g) {
+    while($noline =~ /pub fn LLVM(\w+)\((.*?)\)\s*(->\s*(.*?))?;/g) {
       my $name = $1;
       my $args = $2;
       my $ret = $4;
@@ -42,9 +43,9 @@ sub xform_file {
 
 foreach $file (@files) {
   if ($file =~ /(.+?)\.rs/) {
-    #print "$file\n";
     xform_file ($file);
   }
+
 }
 
 print $acc;
