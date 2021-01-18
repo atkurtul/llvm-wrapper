@@ -1,6 +1,6 @@
 [package]
 name = "llvm-wrapper"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["atil <atilkurtulmus@gmail.com>"]
 edition = "2018"
 description = "Safe llvm-sys wrapper"
