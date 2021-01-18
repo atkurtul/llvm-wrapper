@@ -3,7 +3,7 @@ name = "llvm-wrapper"
 version = "0.1.0"
 authors = ["atil <atilkurtulmus@gmail.com>"]
 edition = "2018"
-
+description = "A short description of my package"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
