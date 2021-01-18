@@ -1,0 +1,3 @@
+[submodule "llvm-sys.rs"]
+	path = llvm-sys.rs
+	url = https://gitlab.com/taricorp/llvm-sys.rs
