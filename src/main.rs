@@ -1,3 +1,4 @@
+#![allow(deprecated)]
 use std::collections::HashSet;
 use std::{collections::HashMap, io::stdin};
 
@@ -23,8 +24,7 @@ fn main() {
 
     let mut funcs = HashMap::<String, Func>::default();
     let mut xargs = HashMap::<String, Vec<String>>::default();
-    let mut src = "".to_owned();
-    stdin().read_to_string(&mut src).unwrap();
+    let src = std::fs::read_to_string("./src/src.txt").unwrap();
     let src = src.split("\n").collect::<Vec<_>>();
     for src in src {
         if let Some(cap) = name.captures(&src) {
@@ -165,8 +165,9 @@ fn main() {
         "ir_reader",
         "linker",
         "object",
-        "orc",
         "orc2",
+        "orc2::lljit",
+        "orc2::ee",
         "prelude",
         "remarks",
         "support",
@@ -180,7 +181,7 @@ fn main() {
         "transforms::util",
         "transforms::vectorize",
     ];
-
+    out2.push("#![allow(deprecated)]".to_owned());
     out2.push(format!("use llvm_sys::*;"));
     for f in mods.iter() {
         out2.push(format!("use llvm_sys::{}::*;", f));
